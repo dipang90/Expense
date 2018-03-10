@@ -55,20 +55,16 @@ class DayPickTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
-            
             if indexPath.row == 0 {
-                fromDate = DateUtility.getDate(date: Date(), formate: "dd/MM/yyyy", timeZone: "GMT", locale: "")
+                fromDate = DateUtil.stringFromDate(date: Date())
                 toDate = ""
-                 self.goPdfView()
+                self.goPdfView()
             }
             if indexPath.row == 1 {
                 let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())
-                fromDate = DateUtility.getDate(date: yesterday!, formate: "dd/MM/yyyy", timeZone: "GMT", locale: "")
+                fromDate =  DateUtil.stringFromDate(date: yesterday!)
                 toDate = ""
-                
-                print(fromDate)
-                
-                 self.goPdfView()
+                self.goPdfView()
             }
         }
         
@@ -82,7 +78,7 @@ class DayPickTableViewController: UITableViewController {
     @IBAction func create(_ sender: Any) {
         fromDate = txtfFromDate.text!
         toDate = txtfToDate.text!
-        let isEndDateHigh = DateUtility.compareDate(startDate: fromDate, endDate: toDate)
+        let isEndDateHigh = DateUtil.compareDate(startDate: fromDate, endDate: toDate)
         if !isEndDateHigh {
             ValidationError.show(title: "", message: "End date must be lower than Begining date")
             return
@@ -165,11 +161,11 @@ extension DayPickTableViewController : UITextFieldDelegate {
     }
     
     func dateTimeForm(textfield : UITextField) -> Void {
-        let customView:UIView = UIView (frame: CGRect(x: 0, y: 180, width: screenWidth, height: 180))
+        let customView:UIView = UIView (frame: CGRect(x: 0, y: 180, width: Expense.screenWidth, height: 180))
         customView.backgroundColor = colorType.headerColor.color
         customView.layer.borderWidth = 0.0
         
-        self.datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 180))
+        self.datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: Expense.screenWidth, height: 180))
         self.datePicker.timeZone = TimeZone(identifier: "GMT")
         self.datePicker.addTarget(self, action: #selector(AddExpenseTableViewController.handleDatePicker(_:)), for: UIControlEvents.valueChanged)
         self.datePicker.setValue(colorType.titleColor.color, forKeyPath: "textColor")
@@ -182,10 +178,10 @@ extension DayPickTableViewController : UITextFieldDelegate {
         self.datePicker.addTarget(self, action: #selector(DayPickTableViewController.datePickerValueChanged), for: UIControlEvents.valueChanged)
         customView.addSubview(datePicker)
         if datePicker.tag == 0 {
-            txtfFromDate.text = self.stringFromDate(date: self.datePicker.date)
+            txtfFromDate.text = DateUtil.stringFromDate(date: self.datePicker.date)
         }
         if datePicker.tag == 1 {
-            txtfToDate.text = self.stringFromDate(date: self.datePicker.date)
+            txtfToDate.text = DateUtil.stringFromDate(date: self.datePicker.date)
         }
         
         let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
@@ -194,7 +190,7 @@ extension DayPickTableViewController : UITextFieldDelegate {
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
         
-        let doneButton:UIButton = UIButton (frame: CGRect(x: screenWidth - 80, y: 5, width: 60, height: 30))
+        let doneButton:UIButton = UIButton (frame: CGRect(x: Expense.screenWidth - 80, y: 5, width: 60, height: 30))
         doneButton.setTitle("Done", for: UIControlState())
         doneButton.addTarget(self, action: #selector(DayPickTableViewController.donedatePickerSelected),
                              for: UIControlEvents.touchUpInside)
@@ -219,29 +215,20 @@ extension DayPickTableViewController : UITextFieldDelegate {
     @objc func datePickerValueChanged (datePicker: UIDatePicker) {
         let date = datePicker.date
         if datePicker.tag == 0 {
-            txtfFromDate.text = self.stringFromDate(date: date)
+            txtfFromDate.text =  DateUtil.stringFromDate(date: date)
         }
         if datePicker.tag == 1 {
-            txtfToDate.text = self.stringFromDate(date: date)
+            txtfToDate.text = DateUtil.stringFromDate(date: date)
         }
     }
     
     func handleDatePicker(_ sender: UIDatePicker) {
         if sender.tag == 0 {
-            txtfFromDate.text = self.stringFromDate(date: sender.date)
+            txtfFromDate.text = DateUtil.stringFromDate(date: sender.date)
         }
         if sender.tag == 1 {
-            txtfToDate.text = self.stringFromDate(date: sender.date)
+            txtfToDate.text = DateUtil.stringFromDate(date: sender.date)
         }
-    }
-    
-    func stringFromDate(date : Date) -> String  {
-        let Formatter = DateFormatter()
-        Formatter.dateFormat = strGlobalDateFormate
-        Formatter.locale = Locale(identifier: "en_US_POSIX")
-        Formatter.timeZone = TimeZone(identifier: "GMT")
-        let dateString: String = Formatter.string(from: date)
-        return dateString
     }
     
     func donedatePickerSelected ()  {

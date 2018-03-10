@@ -93,32 +93,22 @@ class AddExpenseTableViewController: UITableViewController {
         }
         
         for i in 0...40 {
-            let dateValue = dateUtility.dateFromString(formate: strGlobalDateFormate, timeZone: "GMT", locale: "",strDate: txtfdate.text!)
+            let dateValue = DateUtil.dateFromString(string: txtfdate.text!)
             let managedSavedObj =  dbHeloper.savedata(title: txtfTitle.text!, date: dateValue, amount: Float(txtfAmount.text!)!, bywhome: txtfByWhome.text!, remarks: txtvRemarks.text!,place: txtfPlace.text!)
-            print("Save Data -> \(managedSavedObj)")
             self.onAddExpenseChange?(self, managedSavedObj)
         }
-        
-        
-        
         self.dismiss(animated: true, completion: nil)
     }
     
     func showError(message : String) -> Void {
-        
         UIView.animate(withDuration: 0.5, delay: 0.1,
                        options: UIViewAnimationOptions.transitionFlipFromTop,
                        animations: {
-                        
                         self.errorView.showView(title: message)
-                        
         },completion:nil)
     }
     
     //MARK: - TextField Deleget Method
-    
-   
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -127,7 +117,6 @@ class AddExpenseTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
@@ -225,11 +214,11 @@ extension AddExpenseTableViewController : UITextFieldDelegate {
         return true;
     }
     func dateTimeForm() -> Void {
-        let customView:UIView = UIView (frame: CGRect(x: 0, y: 180, width: screenWidth, height: 180))
+        let customView:UIView = UIView (frame: CGRect(x: 0, y: 180, width: Expense.screenWidth, height: 180))
         customView.backgroundColor = colorType.headerColor.color
         customView.layer.borderWidth = 0.0
         
-        self.datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 180))
+        self.datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: Expense.screenWidth, height: 180))
         self.datePicker.timeZone = TimeZone(identifier: "GMT")
         self.datePicker.addTarget(self, action: #selector(AddExpenseTableViewController.handleDatePicker(_:)), for: UIControlEvents.valueChanged)
         self.datePicker.setValue(colorType.titleColor.color, forKeyPath: "textColor")
@@ -239,13 +228,13 @@ extension AddExpenseTableViewController : UITextFieldDelegate {
         self.datePicker.layer.borderColor = UIColor.clear.cgColor
         self.datePicker.date = Date()
         customView.addSubview(datePicker)
-        txtfdate.text = self.stringFromDate(date: self.datePicker.date)
+        txtfdate.text = DateUtil.stringFromDate(date: self.datePicker.date)
         let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
         doneToolbar.barStyle = UIBarStyle.blackOpaque
         doneToolbar.barTintColor = colorType.headerColor.color
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let doneButton:UIButton = UIButton (frame: CGRect(x: screenWidth - 80, y: 5, width: 60, height: 30))
+        let doneButton:UIButton = UIButton (frame: CGRect(x: Expense.screenWidth - 80, y: 5, width: 60, height: 30))
         doneButton.setTitle("Done", for: UIControlState())
         doneButton.addTarget(self, action: #selector(AddExpenseTableViewController.donedatePickerSelected),
                              for: UIControlEvents.touchUpInside)
@@ -270,22 +259,13 @@ extension AddExpenseTableViewController : UITextFieldDelegate {
     
     @objc func datePickerValueChanged (datePicker: UIDatePicker) {
         let date = datePicker.date
-        txtfdate.text = self.stringFromDate(date: date)
-    }
-    
-    func stringFromDate(date : Date) -> String  {
-        let Formatter = DateFormatter()
-        Formatter.dateFormat = strGlobalDateFormate
-        Formatter.locale = Locale(identifier: "en_US_POSIX")
-        Formatter.timeZone = TimeZone(identifier: "GMT")
-        let dateString: String = Formatter.string(from: date)
-        return dateString
+        txtfdate.text = DateUtil.stringFromDate(date: date)
     }
     
     // MARK: -  DatePicker  Call
     func handleDatePicker(_ sender: UIDatePicker) {
         let date = sender.date
-        txtfdate.text = self.stringFromDate(date: date)
+        txtfdate.text = DateUtil.stringFromDate(date: date)
     }
     
     func donedatePickerSelected ()  {

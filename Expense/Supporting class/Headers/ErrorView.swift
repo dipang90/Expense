@@ -10,16 +10,11 @@ import Foundation
 import UIKit
 
 class ErrorView {
-    
     var view: UIView!
-    
     var lblMessage : UILabel!
-    
     init() {
-        
-        self.view = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 30))
+        self.view = UIView(frame: CGRect(x: 0, y: 0, width: Expense.screenWidth, height: 30))
         self.view.backgroundColor = UIColor.red
-        
         lblMessage = UILabel()
         lblMessage.frame = CGRect(x: 10, y: 5, width: self.view.frame.size.width - 20 , height: 20)
         lblMessage.font = fontPopins.Regular.of(size: 14)
@@ -28,21 +23,17 @@ class ErrorView {
     }
     
     func getView() -> UIView {
-        
         self.view.alpha = 0.0
         self.view.isHidden = true
         return self.view
     }
     
     func showView(title : String) {
-        
         self.view.alpha = 1.0
         lblMessage.text = title
         self.view.isHidden = false
     }
-    
     func removeView() {
-        
         lblMessage.text = ""
         self.view.isHidden = true
     }

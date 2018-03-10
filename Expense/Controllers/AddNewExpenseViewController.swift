@@ -16,117 +16,75 @@ class AddNewExpenseViewController: UIViewController, UITextViewDelegate, UITextF
     @IBOutlet weak var txtByWhome: HoshiTextField!
     @IBOutlet weak var txtDate: HoshiTextField!
     @IBOutlet weak var txtTitle: HoshiTextField!
-    
     var objAddexpense : expenseObject!
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.funNavigationBarItems()
-        
         txtvRemarks.layer.masksToBounds = true
         txtvRemarks.layer.cornerRadius = 4.0
         txtvRemarks.layer.borderWidth = 1.0
         txtvRemarks.layer.borderColor = colorType.borderColor.color.cgColor
-        
-        
         // Do any additional setup after loading the view.
     }
     
     // MARK: - Navigation Bar
     func funNavigationBarItems() {
-        
         self.navigationController?.isNavigationBarHidden = false
-        
         self.navigationController?.navigationItem.hidesBackButton = true
-        
         self.title = "Add Expense"
-        
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: fontLato.Regular.rawValue, size: 18)!]
-        
         let backButton : UIBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "close"), style:.plain, target: self, action:#selector(AddNewExpenseViewController.funBack))
         backButton.titleTextAttributes(for: .normal)
         self.navigationItem.leftBarButtonItem = backButton
-        
-        
         let saveButton : UIBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "save"), style: .plain, target: self, action:#selector(AddNewExpenseViewController.funSave))
         saveButton.titleTextAttributes(for: .normal)
         self.navigationItem.rightBarButtonItem = saveButton
     }
     
     func funBack() -> Void {
-        
         _ = self.navigationController?.popViewController(animated: true)
-        
     }
     
     func funSave() -> Void {
-        
         if (txtTitle.text!.isEmpty) && (txtDate.text!.isEmpty) && (txtAmount.text!.isEmpty) && (txtvRemarks.text!.isEmpty) && (txtByWhome.text!.isEmpty) {
-            
-            alertView.alert("Please fill all the details")
-            
-            return
-            
-        } else {
-            
-            if (txtTitle.text!.isEmpty) {
-                
-                alertView.alert("Please fill Title")
-                
+                alertView.alert("Please fill all the details")
                 return
             }
-            
-            if (txtAmount.text!.isEmpty) {
-                
-                alertView.alert("Please fill Amount")
-                
-                return
+    
+            guard let title = txtTitle.text, !title.isEmpty else {
+                return alertView.alert("Please enter Title")
             }
             
-            if (txtByWhome.text!.isEmpty) {
-                
-                alertView.alert("Please fill Bywhome")
-                
-                return
+            guard let amount = txtAmount.text, !amount.isEmpty else {
+                return alertView.alert("Please enter Amount")
             }
             
-            if (txtDate.text!.isEmpty) {
-                
-                alertView.alert("Please fill Date")
-                
-                return
+            guard let bywhome = txtByWhome.text, !bywhome.isEmpty else {
+                return alertView.alert("Please enter Bywhome")
             }
             
-            if (txtvRemarks.text!.isEmpty) {
-                
-                alertView.alert("Please fill Remarks")
-                
-                return
+            guard let date = txtDate.text, !date.isEmpty else {
+                return alertView.alert("Please enter Date")
+            }
+            
+            guard let remarks = txtvRemarks.text, !remarks.isEmpty else {
+                return alertView.alert("Please enter Remarks")
             }
             
             let isSaveData =  dbHeloper.savedata(title: txtTitle.text!, date: Date(), amount: Float(txtAmount.text!)!, bywhome: txtByWhome.text!, remarks: txtvRemarks.text!,place: "")
             
             print("Save Data -> \(isSaveData)")
-            
             objAddexpense = expenseObject()
-            
             objAddexpense.strObjTitle = txtTitle.text!
             objAddexpense.strObjDate = txtDate.text!
             objAddexpense.strObjeRemarks = txtvRemarks.text!
             objAddexpense.strObjBywhome = txtByWhome.text!
             objAddexpense.floatObjAmount = Float(txtAmount.text!)
             
-            OperationQueue.main.addOperation {
-                
+        OperationQueue.main.addOperation {
             self.performSegue(withIdentifier: "addnewexpense_reportlist_segue", sender: self)
-            }
-            
-            
         }
-        
     }
     
     //MARK: - TextField Deleget Method

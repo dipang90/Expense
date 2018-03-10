@@ -28,7 +28,7 @@ class alertView {
 
 
 
-class dateUtility {
+/* class dateUtility {
     
     class func currentDateWithFormate(formate : String, timeZone : String, locale : String) -> String {
         let date = Date()
@@ -186,4 +186,4 @@ struct DateUtility {
 }
 
 
-
+*/

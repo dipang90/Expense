@@ -15,20 +15,17 @@ import UserNotifications
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-     let center = UNUserNotificationCenter.current()
-    
+    let center = UNUserNotificationCenter.current()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        screenWidth = UIScreen.main.bounds.size.width
-        screenHeight = UIScreen.main.bounds.size.height
+        Expense.screenWidth = UIScreen.main.bounds.size.width
+        Expense.screenHeight = UIScreen.main.bounds.size.height
         IQKeyboardManager.sharedManager().enable = true
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: fontLato.Regular.rawValue, size: 18)!]
         UINavigationBar.appearance().barTintColor = colorType.headerColor.color
         UIBarButtonItem.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().isTranslucent = false
-        //UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName:fontPopins.Regular.of(size: 16)], for: UIControlState.normal)
         self.setLocalNotifications()
         return true
     }
@@ -37,13 +34,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return UIApplication.shared.delegate as! AppDelegate
     }
 
-    
     func getDocDir() -> String {
         return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
     }
     
-
-
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -137,9 +131,8 @@ extension AppDelegate {
     }
     
     func callNotification()  {
-        let strToday = dateUtility.currentDateWithFormate(formate: "dd/MM/yyyy", timeZone: "GMT", locale: "")
-        let today = dateUtility.dateFromString(formate: strGlobalDateFormate, timeZone: "GMT", locale: "", strDate: "09/03/2018")
-        let val = dbHeloper.retriveTodayData(date: today)
+        
+        let val = dbHeloper.retriveTodayData(date: Date())
         
         var message = "Please add your expense"
         if val != 0 {

@@ -78,10 +78,6 @@ class PDFViewController: UIViewController {
                                   completion: nil)
             
             /*
-             
-             
-
-             
              {
              let url = URL(string: self.urlString)
              let shareAll = [self.message , url!] as [Any]
@@ -99,15 +95,15 @@ class PDFViewController: UIViewController {
     }
     
     func createExpenseReportWithSignleDate() {
-        let date = DateUtility.dateFromString(formate: "dd/MM/yyyy", timeZone: "GMT", locale: "", strDate: fromDate)
+        let date = DateUtil.dateFromString(string: fromDate)
         let managedObj = dbHeloper.retriveDataWithDate(date: date)
         self.getManageedObject(managedObj:managedObj)
     }
     
     func createExpenseReportWithRange() {
-         let fromdate = DateUtility.dateFromString(formate: "dd/MM/yyyy", timeZone: "GMT", locale: "", strDate: fromDate)
-         let todate = DateUtility.dateFromString(formate: "dd/MM/yyyy", timeZone: "GMT", locale: "", strDate: toDate)
-        let managedObj = dbHeloper.retriveDataWithTo_FromDate(startDate: todate, endDate: fromdate)
+         let fromdate = DateUtil.dateFromString(string: fromDate)
+         let todate = DateUtil.dateFromString(string: toDate)
+         let managedObj = dbHeloper.retriveDataWithTo_FromDate(startDate: todate, endDate: fromdate)
         self.getManageedObject(managedObj:managedObj)
     }
     

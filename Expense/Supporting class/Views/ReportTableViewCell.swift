@@ -9,7 +9,6 @@
 import UIKit
 
 class ReportTableViewCell: UITableViewCell {
-
     @IBOutlet weak var lblDate: UILabel!
     @IBOutlet weak var lblByWhome: UILabel!
     @IBOutlet weak var lblAmount: UILabel!
@@ -18,9 +17,7 @@ class ReportTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code  
-        
         self.backgroundColor = UIColor.white
-        
         self.lblTitle.textColor = colorType.titleColor.color
         self.lblDate.textColor = colorType.titleColor.color
         self.lblByWhome.textColor = colorType.borderColor.color

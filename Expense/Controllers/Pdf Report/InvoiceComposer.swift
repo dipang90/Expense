@@ -72,7 +72,7 @@ class InvoiceComposer: NSObject {
                 itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_NO#", with: "\((indexCount)))")
                 itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_TITLE#", with: String(obj.value(forKey: "title") as! String)!)
                  itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_SPENDBY#", with: String(obj.value(forKey: "bywhome") as! String)!)
-                let strDate = dateUtility.stringFromDate(formate: strGlobalDateFormate, timeZone: "GMT", locale: "", strDate: obj.value(forKey: "date") as! Date)
+                let strDate = DateUtil.stringFromDate(date: obj.value(forKey: "date") as! Date)
                  itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_DATE#", with: strDate)
                 // Format each item's price as a currency value.
                 totalExpense = totalExpense + Float(obj.value(forKey: "amount") as! Float)
@@ -224,45 +224,29 @@ class InvoiceComposer: NSObject {
             
             // For all the items except for the last one we'll use the "single_item.html" template.
             // For the last one we'll use the "last_item.html" template.
-            
-            
             var totalExpense : Float = 0.0
             
             for i in 0..<countIndex {
-                
                 let obj = managedObj[i]
-                
                 var itemHTMLContent: String!
-                
                 // Determine the proper template file.
                 if i != managedObj.count - 1 {
-                    
                     itemHTMLContent = try String(contentsOfFile: pathToSingleItemHTMLTemplate!)
                 }
                 else {
                     itemHTMLContent = try String(contentsOfFile: pathToLastItemHTMLTemplate!)
                 }
                 
-                
-                
                 // Replace the description and price placeholders with the actual values.
                 
                 itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_NO#", with: "\((i+1)))")
-                
                 itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_TITLE#", with: String(obj.value(forKey: "title") as! String)!)
-                
                 itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_SPENDBY#", with: String(obj.value(forKey: "bywhome") as! String)!)
-                
-                let strDate = dateUtility.stringFromDate(formate: strGlobalDateFormate, timeZone: "GMT", locale: "", strDate: obj.value(forKey: "date") as! Date)
-                
+                let strDate = DateUtil.stringFromDate(date: obj.value(forKey: "date") as! Date)
                 itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_DATE#", with: strDate)
-                
                 // Format each item's price as a currency value.
-                
                 totalExpense = totalExpense + Float(obj.value(forKey: "amount") as! Float)
-                
                 itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#PRICE#", with: String(obj.value(forKey: "amount") as! Float))
-                
                 // Add the item's HTML code to the general items string.
                 allItems += itemHTMLContent
             }
@@ -315,9 +299,7 @@ class InvoiceComposer: NSObject {
         // 5. Save PDF file
         pdfFilename = "\(AppDelegate.getAppDelegate().getDocDir())/Invoice.pdf"
         pdfData.write(toFile: pdfFilename, atomically: true)
-        
         print(pdfFilename)
-        
         return pdfFilename
         
     }
@@ -327,7 +309,6 @@ class InvoiceComposer: NSObject {
         pdfData.write(toFile: pdfFilename, atomically: true)
         print(pdfFilename)
     }
-    
     
     func exportHTMLContentToPDF(HTMLContent: String) {
         let printPageRenderer = CustomPrintPageRenderer()

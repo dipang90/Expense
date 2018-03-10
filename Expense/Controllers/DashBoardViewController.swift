@@ -14,31 +14,17 @@ class DashBoardViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var tableViewData: UITableView!
     var arrayExpensedata = [NSManagedObject]()
     var arrayExpensSectionKey = [Date]()
-    var delegetDelet : deletealldataDeleget?
+    var delegetDelete : deletealldataDeleget?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.funNavigationBarItems()
-        delegetDelet = self
+        delegetDelete = self
         tableViewData.register(UINib(nibName: "ReportTableViewCell", bundle: nil), forCellReuseIdentifier: "ReportTableViewCell")
         tableViewData.tableFooterView = UIView()
         tableViewData.delegate = self
         tableViewData.dataSource = self
-        
-        var dateString = "01-02-2010"
-        var dateFormatter = DateFormatter()
-        // this is imporant - we set our input date format to match our input string
-        dateFormatter.dateFormat = "dd-MM-yyyy"
-        // voila!
-        var dateFromString = dateFormatter.date(from: dateString)
-        print("Formater -> \(dateFromString)")
         self.getTodayExpense()
-        
-        let strToday = dateUtility.currentDateWithFormate(formate: "dd/MM/yyyy", timeZone: "GMT", locale: "")
-        let today = dateUtility.dateFromString(formate: strGlobalDateFormate, timeZone: "GMT", locale: "", strDate: strToday)
-        
-        dbHeloper.retriveTodayData(date: today)
-        
     }
     
     // MARK: - Navigation Bar
@@ -67,78 +53,49 @@ class DashBoardViewController: UIViewController, UITableViewDelegate, UITableVie
     func more() -> Void {
         //  pdfviewId settingsId dayPickId
         
-        let alertController = UIAlertController (title: "", message:"Select any operation", preferredStyle: .actionSheet)
+        let alertController = UIAlertController (title: "", message:"", preferredStyle: .actionSheet)
+        let titleFont = [NSFontAttributeName: fontPopins.Medium.of(size: 16)]
+        let messageFont = [NSFontAttributeName: fontPopins.Medium.of(size: 18)]
+        let message = "Select Any Operation"
+        let titleAttrString = NSMutableAttributedString(string: "", attributes: titleFont)
+        let messageAttrString = NSMutableAttributedString(string: message, attributes: messageFont)
+        messageAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.lightGray, range: NSRange(location:0,length:message.count))
+        alertController.setValue(titleAttrString, forKey: "attributedTitle")
+        alertController.setValue(messageAttrString, forKey: "attributedMessage")
+        
         let report = UIAlertAction(title: "Report", style: .default, handler: { (actionSheetController) -> Void in
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "dayPickId") as! DayPickTableViewController
-            let navController = UINavigationController(rootViewController: vc)
-            self.present(navController, animated:true, completion: nil)
+            self.goReportView()
         })
         report.setValue(#imageLiteral(resourceName: "settings"), forKey: "image")
         let setting = UIAlertAction(title: "Settings", style: .default, handler: { (actionSheetController) -> Void in
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "settingsId") as! SettingsTableViewController
-            let navController = UINavigationController(rootViewController: vc)
-            self.present(navController, animated:true, completion: nil)
+            self.goSettingsView()
         })
         setting.setValue(#imageLiteral(resourceName: "settings"), forKey: "image")
-        let cancel = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
+
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(report)
         alertController.addAction(setting)
         alertController.addAction(cancel)
+        
+        alertController.view.tintColor = colorType.headerColor.color
+        alertController.view.backgroundColor = UIColor.gray
+        alertController.view.layer.cornerRadius = 40
         self.present(alertController, animated: true, completion: nil)
     }
     
-    func getTodayExpense() -> Void {
-        
-        arrayExpensedata.removeAll()
-        let strToday = dateUtility.currentDateWithFormate(formate: "dd/MM/yyyy", timeZone: "GMT", locale: "")
-        let today = dateUtility.dateFromString(formate: strGlobalDateFormate, timeZone: "GMT", locale: "", strDate: strToday)
-         let DateTemp11 = dateUtility.dateFromString(formate: strGlobalDateFormate, timeZone: "GMT", locale: "", strDate:  "30/12/2017")
-        let managObjects =  dbHeloper.retriveDataWithDate(date: today)
-       // let managObjects = dbHeloper.retriveDataWithTo_FromDate(startDate: DateTemp, endDate: DateTemp11)
-        arrayExpensedata = managObjects
-        let descriptorGroupName: NSSortDescriptor = NSSortDescriptor(key: "date", ascending:false)
-        let arryDataTemp = (arrayExpensedata as NSArray) .sortedArray(using: [descriptorGroupName])
-        arrayExpensedata.removeAll()
-        arrayExpensedata = arryDataTemp as! [NSManagedObject]
-        arrayExpensSectionKey.removeAll()
-         self.tableViewData.reloadData()
-        
-      /*  for trans in managObjects {
-            
-            let date = trans.value(forKey: "date") as! Date
-            
-            let strDate = dateUtility.stringFromDate(formate: strGlobalDateFormate, timeZone: "GMT", locale: "", strDate: date)
-            
-            print("Trans -> \(strDate)")
-            
-          //  if !arrayExpensSectionKey.contains(date) {
-                
-                arrayExpensSectionKey.append(date)
-           // }
-        }
-        
-       // let sortedNames = arrayExpensSectionKey.sorted { $0.localizedCaseInsensitiveCompare($1) == ComparisonResult.orderedDescending }
-
-        
-       // arrayExpensSectionKey.removeAll()
-      //  arrayExpensSectionKey = sortedNames
-        
-        for strval in arrayExpensSectionKey {
-            
-            let datePredicate = NSPredicate(format: "date == %@", strval as Date as CVarArg)
-            
-            let filetr:Array =  self.arrayExpensSectionKey.filter { datePredicate.evaluate(with: $0)  }
-            
-            if filetr.count > 0 {
-                
-                print("Arrray - > \(filetr)")
-            }
-        } */
-        
-        print("arrayExpensSectionKey -> \(arrayExpensSectionKey)")
+    func goSettingsView() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "settingsId") as! SettingsTableViewController
+        let navController = UINavigationController(rootViewController: vc)
+        self.present(navController, animated:true, completion: nil)
     }
+    func goReportView() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "dayPickId") as! DayPickTableViewController
+        let navController = UINavigationController(rootViewController: vc)
+        self.present(navController, animated:true, completion: nil)
+    }
+    
     func deleteAlldata() {
         arrayExpensedata.removeAll()
         OperationQueue.main.addOperation {
@@ -164,9 +121,29 @@ class DashBoardViewController: UIViewController, UITableViewDelegate, UITableVie
         // Pass the selected object to the new view controller.
     }
 }
+// MARK: - ExpenseData Methods
+extension DashBoardViewController {
+    
+}
+
+// MARK: - ExpenseData Methods
+extension DashBoardViewController {
+    
+    func getTodayExpense() -> Void {
+        let managObjects =  dbHeloper.retriveDataWithDate(date: Date())
+        arrayExpensedata = managObjects
+        let descriptorGroupName: NSSortDescriptor = NSSortDescriptor(key: "date", ascending:false)
+        let arryDataTemp = (arrayExpensedata as NSArray).sortedArray(using: [descriptorGroupName])
+        arrayExpensedata.removeAll()
+        arrayExpensedata = arryDataTemp as! [NSManagedObject]
+        arrayExpensSectionKey.removeAll()
+        self.tableViewData.reloadData()
+    }
+}
 
 // MARK: - tableView Deleget Methods
 extension DashBoardViewController {
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 68
     }
@@ -178,12 +155,11 @@ extension DashBoardViewController {
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReportTableViewCell", for: indexPath) as! ReportTableViewCell
-        
         cell.selectionStyle = .default
         tableView.separatorStyle = .singleLine
         let managedObj = arrayExpensedata[indexPath.row]
         cell.lblTitle.text! = managedObj.value(forKey: "title") as! String
-        let strDate = dateUtility.stringFromDate(formate: strGlobalDateFormate, timeZone: "GMT", locale: "", strDate: managedObj.value(forKey: "date") as! Date)
+        let strDate = DateUtil.stringFromDate(date: managedObj.value(forKey: "date") as! Date)
         cell.lblDate.text!  = strDate
         cell.lblAmount.text! = String(managedObj.value(forKey: "amount") as! Float)
         cell.lblByWhome.text! = "\(managedObj.value(forKey: "bywhome") as! String), \(managedObj.value(forKey: "place") as! String)"
