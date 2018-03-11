@@ -19,6 +19,10 @@ struct DateUtil {
         return formatter
     }
     
+    static func milliscond() -> Int64 {
+        return Int64(Date().timeIntervalSince1970 * 1000)
+    }
+    
     static func stringFromDate(date : Date) -> String {
         let formate = self.dateFormate()
         return formate.string(from: date)

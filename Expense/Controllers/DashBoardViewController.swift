@@ -25,6 +25,11 @@ class DashBoardViewController: UIViewController, UITableViewDelegate, UITableVie
         tableViewData.delegate = self
         tableViewData.dataSource = self
         self.getTodayExpense()
+        
+        let n =  Int64(Date().timeIntervalSince1970)
+        
+       let m =  Int64(Date().timeIntervalSince1970 * 1000)
+        print("Time -> \(m) --- \(n)")
     }
     
     // MARK: - Navigation Bar
@@ -66,11 +71,11 @@ class DashBoardViewController: UIViewController, UITableViewDelegate, UITableVie
         let report = UIAlertAction(title: "Report", style: .default, handler: { (actionSheetController) -> Void in
             self.goReportView()
         })
-        report.setValue(#imageLiteral(resourceName: "settings"), forKey: "image")
+      //  report.setValue(#imageLiteral(resourceName: "settings"), forKey: "image")
         let setting = UIAlertAction(title: "Settings", style: .default, handler: { (actionSheetController) -> Void in
             self.goSettingsView()
         })
-        setting.setValue(#imageLiteral(resourceName: "settings"), forKey: "image")
+       // setting.setValue(#imageLiteral(resourceName: "settings"), forKey: "image")
 
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(report)

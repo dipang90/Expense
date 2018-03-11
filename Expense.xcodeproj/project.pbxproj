@@ -28,6 +28,7 @@
 		248002242053AD7300DFB93A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248002232053AD7300DFB93A /* DetailViewController.swift */; };
 		248002262053C71D00DFB93A /* DateUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248002252053C71D00DFB93A /* DateUtility.swift */; };
 		248002282053CB6100DFB93A /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248002272053CB6100DFB93A /* Extension.swift */; };
+		24AA60A820551A280007F833 /* ImageUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AA60A720551A280007F833 /* ImageUpload.swift */; };
 		3F344BF0B3D6D9B093F03C74 /* Pods_Expense.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF06569FA1BDC0B0003745D1 /* Pods_Expense.framework */; };
 		3FEC7509C308A27590E69DD7 /* Pods_ExpenseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF8A09908851CD5FA393EE9 /* Pods_ExpenseTests.framework */; };
 		DF0A0FF61E21298A00CF2764 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0A0FF51E21298A00CF2764 /* ErrorView.swift */; };
@@ -119,6 +120,7 @@
 		248002232053AD7300DFB93A /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		248002252053C71D00DFB93A /* DateUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtility.swift; sourceTree = "<group>"; };
 		248002272053CB6100DFB93A /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		24AA60A720551A280007F833 /* ImageUpload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUpload.swift; sourceTree = "<group>"; };
 		68AE42138AAEF2548ADFE559 /* Pods-Expense.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Expense.release.xcconfig"; path = "Pods/Target Support Files/Pods-Expense/Pods-Expense.release.xcconfig"; sourceTree = "<group>"; };
 		8889538F00341CEDD5B15327 /* Pods-Expense.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Expense.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Expense/Pods-Expense.debug.xcconfig"; sourceTree = "<group>"; };
 		AF06569FA1BDC0B0003745D1 /* Pods_Expense.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Expense.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -374,6 +376,7 @@
 				DF0A0FF51E21298A00CF2764 /* ErrorView.swift */,
 				248002252053C71D00DFB93A /* DateUtility.swift */,
 				248002272053CB6100DFB93A /* Extension.swift */,
+				24AA60A720551A280007F833 /* ImageUpload.swift */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -708,6 +711,7 @@
 				DF7DF5E81E1BC320007620CE /* dbHelper.swift in Sources */,
 				DF62B0F91E621A780097A878 /* DayPickTableViewController.swift in Sources */,
 				DFC90EB61E18D875009C21F9 /* AppDelegate.swift in Sources */,
+				24AA60A820551A280007F833 /* ImageUpload.swift in Sources */,
 				DF7F39C61E1ACD5000C14AF6 /* Helper.swift in Sources */,
 				DF7DF5B71E1BAECD007620CE /* expense.xcdatamodeld in Sources */,
 				DF4CE3011E29E92600AFAFB9 /* InvoiceComposer.swift in Sources */,

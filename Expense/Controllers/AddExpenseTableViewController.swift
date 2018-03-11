@@ -11,6 +11,8 @@ import CoreData
 
 class AddExpenseTableViewController: UITableViewController {
 
+    @IBOutlet var btnInvoice: UIButton!
+    @IBOutlet var imgPhoto: UIImageView!
     @IBOutlet var lblDescriptionCount: UILabel!
     @IBOutlet var txtvRemarks: UITextView!
     @IBOutlet weak var txtfPlace: UITextField!
@@ -92,13 +94,35 @@ class AddExpenseTableViewController: UITableViewController {
             return
         }
         
-        for i in 0...40 {
-            let dateValue = DateUtil.dateFromString(string: txtfdate.text!)
-            let managedSavedObj =  dbHeloper.savedata(title: txtfTitle.text!, date: dateValue, amount: Float(txtfAmount.text!)!, bywhome: txtfByWhome.text!, remarks: txtvRemarks.text!,place: txtfPlace.text!)
-            self.onAddExpenseChange?(self, managedSavedObj)
+        let time = DateUtil.milliscond()
+        if imgPhoto.image == nil {
+            AlertMessage.showWithCancel(title: "", message: "You haven't uploaded invoice receipt\nAre you sure you want to add expense?" , OK: {
+                 self.saveExpense(title: title, date: date, amount: Float(amount)! , bywhome: bywhome, place: place, remarks: self.txtvRemarks.text!, imagename: "",time: time)
+            }, Cancel: {
+            })
+            return
         }
-        self.dismiss(animated: true, completion: nil)
+        self.saveExpense(title: title, date: date, amount: Float(amount)! , bywhome: bywhome, place: place, remarks: self.txtvRemarks.text!, imagename:"\(time).png",time: time)
     }
+    
+    func saveExpense(title :String, date : String, amount : Float, bywhome : String, place : String, remarks : String, imagename : String, time : Int64) {
+            let dateValue = DateUtil.dateFromString(string: date)
+            let managedSavedObj =  dbHeloper.savedata(title: title, date: dateValue, amount: amount, bywhome: bywhome, remarks: remarks,place: place, imagename: imagename, time: time)
+            self.onAddExpenseChange?(self, managedSavedObj)
+            AlertMessage.showWithCancel(title: "", message: "Expense added successfully\nDo you want add more?", OK: {
+                self.imgPhoto.image = nil
+                self.btnInvoice.setTitle("+ Upload invoice recept", for: .normal)
+                self.txtvRemarks.text = ""
+                self.txtfdate.text = ""
+                self.txtfPalce.text = ""
+                self.txtfTitle.text = ""
+                self.txtfAmount.text = ""
+                self.txtfByWhome.text = ""
+            }, Cancel: {
+            self.dismiss(animated: true, completion: nil)
+        })
+    }
+    
     
     func showError(message : String) -> Void {
         UIView.animate(withDuration: 0.5, delay: 0.1,
@@ -123,7 +147,7 @@ class AddExpenseTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 6
+        return 7
     }
     
     
@@ -285,6 +309,39 @@ extension AddExpenseTableViewController : UITextViewDelegate {
     }
 }
 
-extension AddExpenseTableViewController {
+extension AddExpenseTableViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    @IBAction func uploadInvoice(_ sender: Any) {
+        photoActionSheet.UploadPhotos(photoLibary: {
+            self.gallery()
+        }, camera: {
+            self.camera()
+        })
+    }
     
+    func gallery() {
+        let myPickerController = UIImagePickerController()
+        myPickerController.delegate = self
+        myPickerController.sourceType =  UIImagePickerControllerSourceType.photoLibrary
+        myPickerController.allowsEditing = true
+        self.present(myPickerController, animated: true, completion: nil)
+    }
+    func camera() {
+        let myPickerController = UIImagePickerController()
+        myPickerController.delegate = self
+        myPickerController.sourceType =  UIImagePickerControllerSourceType.camera
+        myPickerController.allowsEditing = true
+        self.present(myPickerController, animated: true, completion: nil)
+    }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
+            self.imgPhoto.image = image
+            self.imgPhoto.contentMode = .center
+            self.btnInvoice.setTitle("", for: .normal)
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
 }

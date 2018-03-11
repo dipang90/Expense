@@ -72,8 +72,7 @@ class AddNewExpenseViewController: UIViewController, UITextViewDelegate, UITextF
                 return alertView.alert("Please enter Remarks")
             }
             
-            let isSaveData =  dbHeloper.savedata(title: txtTitle.text!, date: Date(), amount: Float(txtAmount.text!)!, bywhome: txtByWhome.text!, remarks: txtvRemarks.text!,place: "")
-            
+        let isSaveData =  dbHeloper.savedata(title: txtTitle.text!, date: Date(), amount: Float(txtAmount.text!)!, bywhome: txtByWhome.text!, remarks: txtvRemarks.text!,place: "", imagename: "", time: Int64(0))
             print("Save Data -> \(isSaveData)")
             objAddexpense = expenseObject()
             objAddexpense.strObjTitle = txtTitle.text!

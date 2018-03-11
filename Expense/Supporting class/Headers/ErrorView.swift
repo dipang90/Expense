@@ -52,3 +52,40 @@ struct ValidationError {
     }
 }
 
+struct AlertMessage {
+    
+    static func show(title : String, message : String, OK: @escaping  () -> Void) {
+        let alertController = UIAlertController (title: title, message:message, preferredStyle: .alert)
+        let OkAction = UIAlertAction(title: "OK", style: .default, handler: { (actionSheetController) -> Void in
+            print("handle Save action...")
+            OK()
+        })
+        alertController.addAction(OkAction)
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindowLevelAlert + 1;
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alertController, animated: true, completion: nil)
+    }
+    
+    static func showWithCancel(title : String, message : String, OK: @escaping  () -> Void, Cancel : @escaping() -> Void) {
+        let alertController = UIAlertController (title: title, message:message, preferredStyle: .alert)
+        let OkAction = UIAlertAction(title: "OK", style: .default, handler: { (actionSheetController) -> Void in
+            OK()
+        })
+        let CancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: { (actionSheetController) -> Void in
+            Cancel()
+        })
+        alertController.addAction(CancelAction)
+        alertController.addAction(OkAction)
+        
+        let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+        alertWindow.rootViewController = UIViewController()
+        alertWindow.windowLevel = UIWindowLevelAlert + 1;
+        alertWindow.makeKeyAndVisible()
+        alertWindow.rootViewController?.present(alertController, animated: true, completion: nil)
+        
+    }
+}
+
+

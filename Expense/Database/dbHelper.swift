@@ -21,7 +21,7 @@ class manageObjcontext {
 
 class dbHeloper : manageObjcontext {
 
-    class func savedata (title : String, date : Date, amount : Float, bywhome : String, remarks : String, place : String) -> NSManagedObject {
+    class func savedata (title : String, date : Date, amount : Float, bywhome : String, remarks : String, place : String, imagename:String, time:Int64) -> NSManagedObject {
         let context = getContext()
         // amount,  bywhome,  date, remarks, title
         //retrieve the entity that we just created
@@ -34,6 +34,8 @@ class dbHeloper : manageObjcontext {
         transc.setValue(remarks, forKey: "remarks")
         transc.setValue(title, forKey: "title")
         transc.setValue(place, forKey: "place")
+        transc.setValue(imagename, forKey: "imagename")
+        transc.setValue(time, forKey: "time")
         
         //save the object
         do {
