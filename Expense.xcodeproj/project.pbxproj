@@ -498,11 +498,13 @@
 					DFC90EB11E18D875009C21F9 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = ZLQGRM29J3;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 					DFC90EC51E18D876009C21F9 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 4V6LJL28E3;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						TestTargetID = DFC90EB11E18D875009C21F9;
 					};
@@ -903,7 +905,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.app.Expense.-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -927,7 +930,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.app.Expense.-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -942,7 +946,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.ExpenseTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Expense.app/Expense";
 			};
 			name = Debug;
@@ -958,7 +963,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.ExpenseTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Expense.app/Expense";
 			};
 			name = Release;

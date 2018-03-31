@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ExpenseDelegate {
+    func getExpenselist(startDate : String, endDate : String)
+}
+
 class DayPickTableViewController: UITableViewController {
 
     @IBOutlet var btnCreate: UIButton!
@@ -17,6 +21,7 @@ class DayPickTableViewController: UITableViewController {
     var datePicker : UIDatePicker!
     var fromDate = ""
     var toDate = ""
+    var delegate : ExpenseDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,11 +33,11 @@ class DayPickTableViewController: UITableViewController {
     // MARK: - Navigation Bar
     func funNavigationBarItems() {
         self.title = "Pick day "
-        let backButton : UIBarButtonItem = UIBarButtonItem(image:#imageLiteral(resourceName: "close"), style: UIBarButtonItemStyle.plain, target: self, action:#selector(SettingsTableViewController.funBack))
+        let backButton : UIBarButtonItem = UIBarButtonItem(image:#imageLiteral(resourceName: "close"), style: UIBarButtonItemStyle.plain, target: self, action:#selector(self.funBack))
         self.navigationItem.leftBarButtonItem = backButton
     }
     
-    func funBack() -> Void {
+   @objc func funBack() -> Void {
         self.dismiss(animated: true, completion: nil)
     }
     override func didReceiveMemoryWarning() {
@@ -48,30 +53,32 @@ class DayPickTableViewController: UITableViewController {
             return 1
         }
         return 2
-    }
-   
-    
+    }    
     //dayPickId
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
-                fromDate = DateUtil.stringFromDate(date: Date())
+                let string = DateUtil.stringFromDate(date:Date())
+                let date = DateUtil.dateFromString(string: string)
+                fromDate = DateUtil.stringFromDate(date: date)
                 toDate = ""
-                self.goPdfView()
+                self.goPdfView(startDate: fromDate, endDate: toDate)
             }
             if indexPath.row == 1 {
-                let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+                let string = DateUtil.stringFromDate(date:Date())
+                let date = DateUtil.dateFromString(string: string)
+                let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: date)
                 fromDate =  DateUtil.stringFromDate(date: yesterday!)
                 toDate = ""
-                self.goPdfView()
+                self.goPdfView(startDate: fromDate, endDate: toDate)
             }
         }
         
         if indexPath.section == 2 {
             toDate = ""
             fromDate = ""
-            self.goPdfView()
+            self.goPdfView(startDate: fromDate, endDate: toDate)
         }
     }
     
@@ -83,12 +90,15 @@ class DayPickTableViewController: UITableViewController {
             ValidationError.show(title: "", message: "End date must be lower than Begining date")
             return
         } else {
-            self.goPdfView()
+            self.goPdfView(startDate: fromDate, endDate: toDate)
         }
     }
     
-    func goPdfView()  {
-        self.performSegue(withIdentifier: "dayPick_pdfView", sender: self)
+    func goPdfView(startDate: String, endDate: String)  {
+        self.dismiss(animated: true) {
+            self.delegate?.getExpenselist(startDate: startDate, endDate: endDate)
+        }
+       // self.performSegue(withIdentifier: "dayPick_pdfView", sender: self)
     }
     
     
@@ -231,7 +241,7 @@ extension DayPickTableViewController : UITextFieldDelegate {
         }
     }
     
-    func donedatePickerSelected ()  {
+    @objc func donedatePickerSelected ()  {
         self.txtfFromDate.resignFirstResponder()
         self.txtfToDate.resignFirstResponder()
         if !(txtfToDate.text?.isEmpty)! && !(txtfFromDate.text?.isEmpty)! {

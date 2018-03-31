@@ -33,20 +33,19 @@ class AddNewExpenseViewController: UIViewController, UITextViewDelegate, UITextF
         self.navigationController?.isNavigationBarHidden = false
         self.navigationController?.navigationItem.hidesBackButton = true
         self.title = "Add Expense"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: fontLato.Regular.rawValue, size: 18)!]
-        let backButton : UIBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "close"), style:.plain, target: self, action:#selector(AddNewExpenseViewController.funBack))
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont(name: fontLato.Regular.rawValue, size: 18)!]
+        let backButton : UIBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "close"), style:.plain, target: self, action:#selector(funBack))
         backButton.titleTextAttributes(for: .normal)
         self.navigationItem.leftBarButtonItem = backButton
-        let saveButton : UIBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "save"), style: .plain, target: self, action:#selector(AddNewExpenseViewController.funSave))
+        let saveButton : UIBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "save"), style: .plain, target: self, action:#selector(funSave))
         saveButton.titleTextAttributes(for: .normal)
         self.navigationItem.rightBarButtonItem = saveButton
     }
-    
-    func funBack() -> Void {
+    @objc func funBack() -> Void {
         _ = self.navigationController?.popViewController(animated: true)
     }
     
-    func funSave() -> Void {
+    @objc func funSave() -> Void {
         if (txtTitle.text!.isEmpty) && (txtDate.text!.isEmpty) && (txtAmount.text!.isEmpty) && (txtvRemarks.text!.isEmpty) && (txtByWhome.text!.isEmpty) {
                 alertView.alert("Please fill all the details")
                 return
@@ -71,8 +70,10 @@ class AddNewExpenseViewController: UIViewController, UITextViewDelegate, UITextF
             guard let remarks = txtvRemarks.text, !remarks.isEmpty else {
                 return alertView.alert("Please enter Remarks")
             }
+            let string = DateUtil.stringFromDate(date:Date())
+            let dateToday = DateUtil.dateFromString(string: string)
             
-        let isSaveData =  dbHeloper.savedata(title: txtTitle.text!, date: Date(), amount: Float(txtAmount.text!)!, bywhome: txtByWhome.text!, remarks: txtvRemarks.text!,place: "", imagename: "", time: Int64(0))
+        let isSaveData =  dbHeloper.savedata(title: txtTitle.text!, date: dateToday, amount: Float(txtAmount.text!)!, bywhome: txtByWhome.text!, remarks: txtvRemarks.text!,place: "", imagename: "", time: Int64(0))
             print("Save Data -> \(isSaveData)")
             objAddexpense = expenseObject()
             objAddexpense.strObjTitle = txtTitle.text!
@@ -87,116 +88,72 @@ class AddNewExpenseViewController: UIViewController, UITextViewDelegate, UITextF
     }
     
     //MARK: - TextField Deleget Method
-    
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        
         print("TextField did begin editing method called")
         
     }
-    
     func textFieldDidEndEditing(_ textField: UITextField) {
-        
         print("TextField did end editing method called\(textField.text)")
-        
         textField.resignFirstResponder()
         
     }
-    
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        
         print("TextField should begin editing method called")
-        
         return true;
     }
-    
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        
         print("TextField should clear method called")
         return true;
     }
-    
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         print("TextField should end editing method called")
         return true;
     }
-    
-    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         print("While entering the characters this method gets called")
         return true;
     }
-    
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
         print("TextField should return method called")
-        
         textField.resignFirstResponder();
         return true;
     }
-    
     //MARK: - TextView Deleget Methods...
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-            
         textView.resignFirstResponder()
-            
         return true
     }
-        
     func textViewDidEndEditing(_ textView: UITextView) {
-            
         textView.resignFirstResponder()
-            
     }
-        
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-            
         if(text == "\n") {
-                
             textView.resignFirstResponder()
-                
             return false
         }
-            
         return true
     }
-        
     func textViewShouldReturn(_ textView: UITextView!) -> Bool {
-        
         textView.resignFirstResponder()
-            
         return true;
     }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
         self.view.endEditing(true)
     }
-    
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    
-
-    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if segue.identifier == "addnewexpense_reportlist_segue" {
-            
             let reportView = segue.destination as! ReportListViewController
-            
             reportView.objReportList = self.objAddexpense
         }
-        
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
-    
-
 }

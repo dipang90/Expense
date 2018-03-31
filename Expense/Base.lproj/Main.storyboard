@@ -10,6 +10,9 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="Lato-Light_0.ttf">
+            <string>Lato-Light</string>
+        </array>
         <array key="Lato-Regular.ttf">
             <string>Lato-Regular</string>
         </array>
@@ -39,17 +42,29 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="XXs-5a-SZV"/>
                                 </connections>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No expense for Today" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bSH-ge-uM2">
+                                <rect key="frame" x="23.5" y="244" width="274" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="1qR-70-KWJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Lato-Light" family="Lato" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <constraints>
                             <constraint firstItem="r4f-ja-kaj" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Qiw-cM-wFB"/>
+                            <constraint firstItem="bSH-ge-uM2" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="SV0-Z3-gbh"/>
                             <constraint firstAttribute="trailing" secondItem="r4f-ja-kaj" secondAttribute="trailing" id="Y0a-ky-nhs"/>
                             <constraint firstItem="r4f-ja-kaj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="eHM-pb-I15"/>
+                            <constraint firstItem="bSH-ge-uM2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="fAi-d1-AFM"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="r4f-ja-kaj" secondAttribute="bottom" id="wYX-X1-Sdp"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Fax-D7-R1o"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="lblNoData" destination="bSH-ge-uM2" id="0pZ-qo-WOl"/>
                         <outlet property="tableViewData" destination="r4f-ja-kaj" id="KmJ-nm-7F9"/>
                         <segue destination="xaC-uE-oD8" kind="presentation" identifier="dashboard_addexpense-segue" id="IF6-x1-lsO"/>
                     </connections>
@@ -702,7 +717,47 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mre-ty-vMY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="21" y="87"/>
+            <point key="canvasLocation" x="-358" y="87"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="e3E-iR-EAP">
+            <objects>
+                <tableViewController id="naU-HL-IOV" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="18" id="gSI-gx-F5D">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection id="fuT-2c-zdD">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="44" id="E3z-Kw-bZ0">
+                                        <rect key="frame" x="0.0" y="35" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="E3z-Kw-bZ0" id="c5i-3D-pkt">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="4My-0j-Qiv">
+                                        <rect key="frame" x="0.0" y="79" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4My-0j-Qiv" id="kGR-up-KNF">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="naU-HL-IOV" id="GL2-YT-dlT"/>
+                            <outlet property="delegate" destination="naU-HL-IOV" id="RSn-qm-ZUN"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2fB-2D-Aan" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="259" y="805"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="Nrv-PS-a7x">
@@ -726,7 +781,7 @@
         <scene sceneID="rvv-YN-o07">
             <objects>
                 <tableViewController storyboardIdentifier="dashboard_addexpenseId" id="xaC-uE-oD8" customClass="AddExpenseTableViewController" customModule="Expense" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="18" id="cZa-EV-bqh">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="18" id="cZa-EV-bqh">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -750,6 +805,9 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <state key="normal" title="+ Upload invoice recept">
                                                         <color key="titleColor" red="0.0" green="0.62352941179999999" blue="0.85490196080000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <state key="highlighted">
+                                                        <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
                                                         <action selector="uploadInvoice:" destination="xaC-uE-oD8" eventType="touchUpInside" id="Aez-xL-lal"/>

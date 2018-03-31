@@ -10,19 +10,18 @@ import Foundation
 import CoreData
 import UIKit
 
-class manageObjcontext {
-    
-   class func getContext () -> NSManagedObjectContext {
+struct manageObjcontext {
+   static func getContext () -> NSManagedObjectContext {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         return appDelegate.persistentContainer.viewContext
     }
 }
 
 
-class dbHeloper : manageObjcontext {
+struct dbHeloper  {
 
-    class func savedata (title : String, date : Date, amount : Float, bywhome : String, remarks : String, place : String, imagename:String, time:Int64) -> NSManagedObject {
-        let context = getContext()
+    static func savedata (title : String, date : Date, amount : Float, bywhome : String, remarks : String, place : String, imagename:String, time:Int64) -> NSManagedObject {
+        let context = manageObjcontext.getContext()
         // amount,  bywhome,  date, remarks, title
         //retrieve the entity that we just created
         let entity =  NSEntityDescription.entity(forEntityName: "User", in: context)
@@ -48,9 +47,9 @@ class dbHeloper : manageObjcontext {
         return NSManagedObject()
     }
     
-    class func  retriveAllData() -> [NSManagedObject] {
+    static func  retriveAllData() -> [NSManagedObject] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
-        let context = getContext()
+        let context = manageObjcontext.getContext()
         do {
             let managedObjects = try context.fetch(fetchRequest)
             return managedObjects as! [NSManagedObject]
@@ -60,23 +59,23 @@ class dbHeloper : manageObjcontext {
         return [NSManagedObject()]
     }
     
-    class func retriveDataWithTo_FromDate (startDate : Date, endDate : Date) -> [NSManagedObject] {
+    static func retriveDataWithTo_FromDate (startDate : Date, endDate : Date) -> [NSManagedObject] {
         //create a fetch request, telling it about the entity
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
         fetchRequest.predicate = NSPredicate(format: "(date >= %@) AND (date <= %@)", startDate as CVarArg, endDate as CVarArg)
-        print("Fetch request -> \(fetchRequest.predicate)")
+        print("Fetch request -> \(String(describing: fetchRequest.predicate))")
         return self.callRequest(request: fetchRequest)
     }
     
-    class func retriveDataWithDate(date : Date) -> [NSManagedObject] {
+    static func retriveDataWithDate(date : Date) -> [NSManagedObject] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
         fetchRequest.predicate = NSPredicate(format: "date == %@", date as CVarArg)
         return self.callRequest(request: fetchRequest)
     }
     
-    class func retriveTodayData(date : Date) -> Float {
+    static func retriveTodayData(date : Date) -> Float {
         
-        let context = getContext()
+        let context = manageObjcontext.getContext()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
         fetchRequest.predicate = NSPredicate(format: "date == %@", date as CVarArg)
         fetchRequest.resultType = .dictionaryResultType
@@ -103,9 +102,9 @@ class dbHeloper : manageObjcontext {
     }
     
   
-    class func callRequest(request : NSFetchRequest<NSFetchRequestResult>) -> [NSManagedObject] {
+    static func callRequest(request : NSFetchRequest<NSFetchRequestResult>) -> [NSManagedObject] {
         
-        let context = getContext()
+        let context = manageObjcontext.getContext()
         do {
             //go get the results
             let searchResults = try context.fetch(request)
@@ -116,9 +115,9 @@ class dbHeloper : manageObjcontext {
         return []
     }
     
-    class func deleteRow(managedObject : NSManagedObject) -> Bool {
+    static func deleteRow(managedObject : NSManagedObject) -> Bool {
         
-        let context = getContext()
+        let context = manageObjcontext.getContext()
         context.delete(managedObject)
         do {
             try context.save()
@@ -130,8 +129,8 @@ class dbHeloper : manageObjcontext {
         return true
     }
     
-    class func deleteAllData() -> Bool {
-         let context = getContext()
+    static func deleteAllData() -> Bool {
+         let context = manageObjcontext.getContext()
          let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
         let manageObjes =  self.callRequest(request: fetchRequest)
         for obj in manageObjes {
@@ -148,9 +147,9 @@ class dbHeloper : manageObjcontext {
     }
     
     
-    class func updateData (title : String, date : Date, amount : Float, bywhome : String, remarks : String, place : String, managedObj : NSManagedObject) -> NSManagedObject {
+    static func updateData (title : String, date : Date, amount : Float, bywhome : String, remarks : String, place : String, managedObj : NSManagedObject) -> NSManagedObject {
         
-        let context = getContext()
+        let context = manageObjcontext.getContext()
         managedObj.setValue(amount, forKey: "amount")
         managedObj.setValue(bywhome, forKey: "bywhome")
         managedObj.setValue(date, forKey: "date")

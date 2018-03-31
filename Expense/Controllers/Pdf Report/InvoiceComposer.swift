@@ -70,8 +70,8 @@ class InvoiceComposer: NSObject {
                 }
                 // Replace the description and price placeholders with the actual values.
                 itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_NO#", with: "\((indexCount)))")
-                itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_TITLE#", with: String(obj.value(forKey: "title") as! String)!)
-                 itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_SPENDBY#", with: String(obj.value(forKey: "bywhome") as! String)!)
+                itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_TITLE#", with: (obj.value(forKey: "title") as! String))
+                itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_SPENDBY#", with: (obj.value(forKey: "bywhome") as! String))
                 let strDate = DateUtil.stringFromDate(date: obj.value(forKey: "date") as! Date)
                  itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_DATE#", with: strDate)
                 // Format each item's price as a currency value.
@@ -240,8 +240,8 @@ class InvoiceComposer: NSObject {
                 // Replace the description and price placeholders with the actual values.
                 
                 itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_NO#", with: "\((i+1)))")
-                itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_TITLE#", with: String(obj.value(forKey: "title") as! String)!)
-                itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_SPENDBY#", with: String(obj.value(forKey: "bywhome") as! String)!)
+                itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_TITLE#", with: (obj.value(forKey: "title") as! String))
+                itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_SPENDBY#", with: (obj.value(forKey: "bywhome") as! String))
                 let strDate = DateUtil.stringFromDate(date: obj.value(forKey: "date") as! Date)
                 itemHTMLContent = itemHTMLContent.replacingOccurrences(of: "#ITEM_DATE#", with: strDate)
                 // Format each item's price as a currency value.

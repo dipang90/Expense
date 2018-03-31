@@ -46,7 +46,7 @@ class AddExpenseTableViewController: UITableViewController {
         self.navigationController?.isNavigationBarHidden = false
         self.navigationController?.navigationItem.hidesBackButton = true
         self.title = "Add Expense"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: fontPopins.Regular.of(size: 18)]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: fontPopins.Regular.of(size: 18)]
         
         let backButton : UIBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "close"), style: .plain, target: self, action:#selector(AddNewExpenseViewController.funBack))
         self.navigationItem.leftBarButtonItem = backButton
@@ -56,19 +56,16 @@ class AddExpenseTableViewController: UITableViewController {
         self.navigationItem.rightBarButtonItem = saveButton
     }
     
-    func funBack() -> Void {
+   @objc func funBack() -> Void {
         self.dismiss(animated: true, completion: nil)
     }
     
     func funSave() -> Void {
-        
         UIView.animate(withDuration: 3.0, delay: 3.0,
                        options: .curveEaseInOut,
                        animations: {
                         self.errorView.removeView()
-                        
         },completion:nil)
-        
         if (txtfTitle.text!.isEmpty) && (txtfdate.text!.isEmpty) && (txtfAmount.text!.isEmpty) && (txtvRemarks.text!.isEmpty) && (txtfByWhome.text!.isEmpty) && (txtfPlace.text!.isEmpty) {
             self.showError(message: "Please enter all details")
             return
@@ -287,12 +284,12 @@ extension AddExpenseTableViewController : UITextFieldDelegate {
     }
     
     // MARK: -  DatePicker  Call
-    func handleDatePicker(_ sender: UIDatePicker) {
+    @objc func handleDatePicker(_ sender: UIDatePicker) {
         let date = sender.date
         txtfdate.text = DateUtil.stringFromDate(date: date)
     }
     
-    func donedatePickerSelected ()  {
+    @objc func donedatePickerSelected ()  {
         self.txtfdate.resignFirstResponder()
     }
 }

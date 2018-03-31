@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Expense.screenWidth = UIScreen.main.bounds.size.width
         Expense.screenHeight = UIScreen.main.bounds.size.height
         IQKeyboardManager.sharedManager().enable = true
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: fontLato.Regular.rawValue, size: 18)!]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont(name: fontLato.Regular.rawValue, size: 18)!]
         UINavigationBar.appearance().barTintColor = colorType.headerColor.color
         UIBarButtonItem.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().isTranslucent = false
@@ -152,8 +152,8 @@ extension AppDelegate {
         let identifier = "UYLLocalNotification"
         var dateComponents = DateComponents()
        // dateComponents.weekday = 1
-        dateComponents.hour = 1
-        dateComponents.minute = 19
+        dateComponents.hour = 21
+        dateComponents.minute = 38
         let notificationTrigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         let request = UNNotificationRequest(identifier: identifier,
                                             content: content, trigger: notificationTrigger)

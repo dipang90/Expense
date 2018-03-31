@@ -42,11 +42,11 @@ class PDFViewController: UIViewController {
         saveButton  = UIBarButtonItem(image : #imageLiteral(resourceName: "share"), style: UIBarButtonItemStyle.plain, target: self, action:#selector(PDFViewController.exportToPDF))
     }
 
-    func funBack() -> Void {
+    @objc func funBack() -> Void {
         self.navigationController?.popViewController(animated: true)
     }
     
-    func exportToPDF() -> Void {
+    @objc func exportToPDF() -> Void {
         if self.managedObj.count > 0 {
             HTMLContent = ""
             let numbers : [NSManagedObject] = managedObj

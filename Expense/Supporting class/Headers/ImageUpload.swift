@@ -14,12 +14,12 @@ struct photoActionSheet {
     static func UploadPhotos(photoLibary: @escaping  () -> Void, camera : @escaping() -> Void) {
         let alertController = UIAlertController (title: "", message:"", preferredStyle: .actionSheet)
         
-        let titleFont = [NSFontAttributeName: fontPopins.Medium.of(size: 16)]
-        let messageFont = [NSFontAttributeName: fontPopins.Medium.of(size: 18)]
+        let titleFont = [NSAttributedStringKey.font: fontPopins.Medium.of(size: 16)]
+        let messageFont = [NSAttributedStringKey.font: fontPopins.Medium.of(size: 18)]
         let message = "Upload Invoice Receipt"
         let titleAttrString = NSMutableAttributedString(string: "", attributes: titleFont)
         let messageAttrString = NSMutableAttributedString(string: message, attributes: messageFont)
-        messageAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.lightGray, range: NSRange(location:0,length:message.count))
+        messageAttrString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.black, range: NSRange(location:0,length:message.count))
         alertController.setValue(titleAttrString, forKey: "attributedTitle")
         alertController.setValue(messageAttrString, forKey: "attributedMessage")
                 

@@ -13,8 +13,8 @@ class DashBoardViewController: UIViewController, UITableViewDelegate, UITableVie
 
     @IBOutlet weak var tableViewData: UITableView!
     var arrayExpensedata = [NSManagedObject]()
-    var arrayExpensSectionKey = [Date]()
     var delegetDelete : deletealldataDeleget?
+    @IBOutlet var lblNoData: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,38 +35,43 @@ class DashBoardViewController: UIViewController, UITableViewDelegate, UITableVie
     // MARK: - Navigation Bar
     func funNavigationBarItems() {
         self.title = "Dashboard"
-        let addButton = UIBarButtonItem(image: #imageLiteral(resourceName: "add"), style: .plain, target: self, action: #selector(DashBoardViewController.addExpense))
-        addButton.titleTextAttributes(for: .normal)
+        let listButton = UIBarButtonItem(image: #imageLiteral(resourceName: "list"), style: .plain, target: self, action: #selector(DashBoardViewController.goReportView))
+        listButton.titleTextAttributes(for: .normal)
         let moreButton  = UIBarButtonItem(image: #imageLiteral(resourceName: "more"), style: .plain, target: self, action:#selector(DashBoardViewController.more))
         moreButton.titleTextAttributes(for: .normal)
-        self.navigationItem.rightBarButtonItems =  [moreButton,addButton]
+        self.navigationItem.rightBarButtonItems =  [moreButton,listButton]
     }
     
-    func addExpense() -> Void {
+    func addExpense() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "dashboard_addexpenseId") as! AddExpenseTableViewController
         let navController = UINavigationController(rootViewController: vc)
         self.present(navController, animated:true, completion: nil)
         vc.onAddExpenseChange = { (_ view: AddExpenseTableViewController, _ managedObject : NSManagedObject) -> Void in
             self.arrayExpensedata.insert(managedObject, at: 0)
+            self.hideLabel()
             OperationQueue.main.addOperation {
                 self.tableViewData.reloadData()
             }
         }
     }
     
-    func more() -> Void {
+    @objc func more() {
         //  pdfviewId settingsId dayPickId
         
         let alertController = UIAlertController (title: "", message:"", preferredStyle: .actionSheet)
-        let titleFont = [NSFontAttributeName: fontPopins.Medium.of(size: 16)]
-        let messageFont = [NSFontAttributeName: fontPopins.Medium.of(size: 18)]
+        let titleFont = [NSAttributedStringKey.font: fontPopins.Medium.of(size: 16)]
+        let messageFont = [NSAttributedStringKey.font: fontPopins.Medium.of(size: 18)]
         let message = "Select Any Operation"
         let titleAttrString = NSMutableAttributedString(string: "", attributes: titleFont)
         let messageAttrString = NSMutableAttributedString(string: message, attributes: messageFont)
-        messageAttrString.addAttribute(NSForegroundColorAttributeName, value: UIColor.lightGray, range: NSRange(location:0,length:message.count))
+        messageAttrString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.lightGray, range: NSRange(location:0,length:message.count))
         alertController.setValue(titleAttrString, forKey: "attributedTitle")
         alertController.setValue(messageAttrString, forKey: "attributedMessage")
+        
+        let add = UIAlertAction(title: "Add Expense", style: .default, handler: { (actionSheetController) -> Void in
+            self.addExpense()
+        })
         
         let report = UIAlertAction(title: "Report", style: .default, handler: { (actionSheetController) -> Void in
             self.goReportView()
@@ -78,7 +83,8 @@ class DashBoardViewController: UIViewController, UITableViewDelegate, UITableVie
        // setting.setValue(#imageLiteral(resourceName: "settings"), forKey: "image")
 
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(report)
+        alertController.addAction(add)
+       // alertController.addAction(report)
         alertController.addAction(setting)
         alertController.addAction(cancel)
         
@@ -94,9 +100,10 @@ class DashBoardViewController: UIViewController, UITableViewDelegate, UITableVie
         let navController = UINavigationController(rootViewController: vc)
         self.present(navController, animated:true, completion: nil)
     }
-    func goReportView() {
+   @objc func goReportView() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "dayPickId") as! DayPickTableViewController
+        vc.delegate = self
         let navController = UINavigationController(rootViewController: vc)
         self.present(navController, animated:true, completion: nil)
     }
@@ -128,20 +135,56 @@ class DashBoardViewController: UIViewController, UITableViewDelegate, UITableVie
 }
 // MARK: - ExpenseData Methods
 extension DashBoardViewController {
-    
+    func hideLabel() {
+        self.lblNoData.isHidden = true
+        if self.arrayExpensedata.count == 0 {
+            self.lblNoData.isHidden = false
+        }
+    }
 }
 
 // MARK: - ExpenseData Methods
-extension DashBoardViewController {
+extension DashBoardViewController : ExpenseDelegate {
     
     func getTodayExpense() -> Void {
-        let managObjects =  dbHeloper.retriveDataWithDate(date: Date())
-        arrayExpensedata = managObjects
+        let string = DateUtil.stringFromDate(date:Date())
+        let date = DateUtil.dateFromString(string: string)
+        let managObjects =  dbHeloper.retriveDataWithDate(date: date)
+        self.reloadTable(managedObj: managObjects)
+    }
+    
+    func getExpenselist(startDate: String, endDate: String) {
+        if startDate.isEmpty && endDate.isEmpty {
+            self.createExpenseReport()
+        } else if endDate.isEmpty {
+            self.createExpenseReportWithSignleDate(startDate: startDate)
+        } else {
+            self.createExpenseReportWithRange(startDate: startDate, endDate: endDate)
+        }
+    }
+    func createExpenseReport() {
+        let managedObj = dbHeloper.retriveAllData()
+        self.reloadTable(managedObj:managedObj)
+    }
+    func createExpenseReportWithSignleDate(startDate: String) {
+        let date = DateUtil.dateFromString(string: startDate)
+        let managedObj = dbHeloper.retriveDataWithDate(date: date)
+        self.reloadTable(managedObj:managedObj)
+    }
+    func createExpenseReportWithRange(startDate: String, endDate: String) {
+        let fromdate = DateUtil.dateFromString(string: startDate)
+        let todate = DateUtil.dateFromString(string: endDate)
+        let managedObj = dbHeloper.retriveDataWithTo_FromDate(startDate: todate, endDate: fromdate)
+        self.reloadTable(managedObj:managedObj)
+    }
+    func reloadTable(managedObj : [NSManagedObject]) {
+        self.arrayExpensedata.removeAll()
+        arrayExpensedata = managedObj
         let descriptorGroupName: NSSortDescriptor = NSSortDescriptor(key: "date", ascending:false)
         let arryDataTemp = (arrayExpensedata as NSArray).sortedArray(using: [descriptorGroupName])
         arrayExpensedata.removeAll()
         arrayExpensedata = arryDataTemp as! [NSManagedObject]
-        arrayExpensSectionKey.removeAll()
+        self.hideLabel()
         self.tableViewData.reloadData()
     }
 }
@@ -177,6 +220,7 @@ extension DashBoardViewController {
             if isDelete {
                 self.arrayExpensedata.remove(at: indexPath.row)
                 OperationQueue.main.addOperation {
+                    self.hideLabel()
                     self.tableViewData.beginUpdates()
                     self.tableViewData.deleteRows(at: [indexPath], with: .automatic)
                     self.tableViewData.endUpdates()

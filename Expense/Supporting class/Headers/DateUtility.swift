@@ -30,9 +30,15 @@ struct DateUtil {
     
     static func dateFromString(string : String) -> Date {
         let formate = self.dateFormate()
-        let date = formate.date(from: string)!
-        let somedateString = formate.string(from: date)
-        return formate.date(from: somedateString)!
+      //  return formate.date(from: string)!
+        
+        let formatter : DateFormatter  = DateFormatter()
+        formatter.dateFormat = "dd MMM, yyyy"
+        formatter.timeZone = TimeZone(identifier: "")
+        let myDate = formatter.date(from: string)!
+        let somedateString = formatter.string(from: myDate)
+        return formatter.date(from: somedateString)!
+        
     }
     
     static func compareDate(startDate : String, endDate : String) -> Bool {

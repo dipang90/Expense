@@ -44,7 +44,7 @@ class SettingsTableViewController: UITableViewController {
         self.navigationItem.leftBarButtonItem = backButton
     }
     
-    func funBack() -> Void {
+    @objc func funBack() -> Void {
         self.dismiss(animated: true, completion: nil)
     }
     override func didReceiveMemoryWarning() {
